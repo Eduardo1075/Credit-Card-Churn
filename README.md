@@ -248,8 +248,108 @@ Abordagens adequadas de **balanceamento e avaliação de métricas** serão fund
 
 ---
 
-# Análise
-![distribuicao](images/education_level)
+# Análise — Distribuição do Nível de Educação (`education_level`)
+![distribuicao](images/education_level.png)
 
+O gráfico apresenta a distribuição dos níveis educacionais no conjunto de dados, destacando as categorias mais representativas e suas implicações para o projeto de *Machine Learning*.
 
+---
 
+###  Principais Resultados
+
+A distribuição concentra-se em três categorias principais, que juntas representam mais de **65%** dos dados:
+
+- **Graduate (30,6%)** — categoria majoritária.  
+- **High School (20,4%)** — segunda mais frequente.  
+- **Unknown (14,9%)** — terceira mais comum, exigindo tratamento específico.
+
+As categorias **Uneducated (14,6%)** e **College (9,8%)** possuem presença intermediária, enquanto **Post-Graduate (5,3%)** e **Doctorate (4,4%)** são minoritárias.
+
+---
+
+###  Implicações Analíticas
+
+1. **Tratamento de valores "Unknown":** Deve ser imputado ou mantido como categoria própria, pois pode conter informação preditiva.  
+2. **Agrupamento de classes raras:** *Post-Graduate* e *Doctorate* podem ser combinadas em uma categoria “Advanced Degrees” para melhorar o aprendizado do modelo.  
+3. **Foco nas classes majoritárias:** As análises e segmentações iniciais devem priorizar *Graduate* e *High School*, que representam o perfil predominante dos clientes.
+
+---
+
+Em síntese, o dataset apresenta um público com predominância de formação **média e superior**, mas com **lacunas relevantes de informação educacional**, fator que deve ser cuidadosamente tratado nas etapas de modelagem.
+
+---
+
+# Análise — Distribuição do Estado Civil (`marital_status`)
+![distribuicao](images/marital_status.png)
+
+O gráfico exibe a distribuição dos clientes por estado civil, destacando as categorias mais representativas e as implicações para o tratamento dos dados.
+
+---
+
+###  Principais Resultados
+
+A variável apresenta **alta concentração** em duas categorias, que juntas somam **85,2%** dos clientes:
+
+- **Married (46,4%)** — categoria majoritária.  
+- **Single (38,8%)** — segunda mais frequente.  
+
+As categorias minoritárias são:  
+- **Unknown (7,5%)**  
+- **Divorced (7,4%)**
+
+Essas duas últimas possuem proporções semelhantes e representam uma pequena parcela da base.
+
+---
+
+###  Implicações Analíticas
+
+1. **Tratamento da categoria "Unknown":**  
+   - Pode ser mantida como uma categoria própria durante a codificação (*One-Hot Encoding*), pois a ausência de informação pode ter valor preditivo.  
+   - Alternativamente, pode ser imputada com a moda (*Married*), se houver justificativa sólida.  
+
+2. **Impacto na Modelagem:**  
+   - As classes **Divorced** e **Unknown** terão menor influência no treinamento do modelo devido à sua baixa representatividade.  
+   - A modelagem deve priorizar a correta diferenciação entre **Married** e **Single**, que dominam a amostra.
+
+---
+
+Em síntese, o estado civil dos clientes é predominantemente **Casado ou Solteiro**, enquanto os dados *Unknown* exigem atenção especial durante o pré-processamento para evitar viés no modelo.
+
+---
+
+# Análise — Distribuição da Categoria de Renda (`income_category`)
+![distribuicao](images/income_category.png)
+
+O gráfico apresenta a distribuição dos clientes por faixas de renda, destacando a predominância das classes de **renda baixa e média**.
+
+---
+
+###  Perfil de Renda dos Clientes
+
+A base é dominada por clientes com **renda abaixo de \$80K**, que representam cerca de **67%** do total:
+
+- **Less than \$40K:** 35,0% (classe majoritária)  
+- **\$40K – 60K:** 17,9%  
+- **\$60K – 80K:** 14,0%  
+
+As faixas de **renda alta** e **dados ausentes** têm menor presença:
+
+- **\$120K +:** 7,3% (classe minoritária)  
+- **Unknown:** 10,9% (dados faltantes significativos)
+
+---
+
+###  Implicações Analíticas
+
+1. **Viés de Aprendizado:**  
+   O modelo de *Machine Learning* aprenderá padrões dominantes das faixas de **renda baixa e média**, com pouca representatividade das classes mais altas.
+
+2. **Tratamento da Categoria “Unknown”:**  
+   Deve ser mantida como categoria própria durante a codificação, pois a ausência de informação pode conter valor preditivo relevante.
+
+3. **Ajuste de Categorias:**  
+   Para lidar com o baixo volume da faixa **\$120K +**, pode-se agrupá-la com **\$80K – 120K** em uma categoria única (“\$80K +”), fortalecendo o aprendizado sobre clientes de renda mais alta.
+
+---
+
+Em resumo, o conjunto de dados reflete uma base **majoritariamente de classe média-baixa**, o que requer atenção ao balanceamento e à representação das faixas superiores e dos dados desconhecidos na modelagem.
