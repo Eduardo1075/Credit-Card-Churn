@@ -443,3 +443,256 @@ O gráfico de barras agrupadas compara o número de clientes que **Cancelaram** 
 ### Conclusão
 
 O **nível de educação** mostra **baixo poder preditivo** para explicar o *Churn*. Estratégias de retenção devem se concentrar em outras variáveis com maior influência sobre o cancelamento.
+
+---
+
+# Análise do Estado Civil por Churn
+![churn](images/churn_marital_status.png)
+
+O gráfico de barras agrupadas compara clientes que **Cancelaram** e **Não Cancelaram**, segmentados pelo **Estado Civil**, para avaliar se esta variável influencia o risco de *Churn*.
+
+### Principais Insights
+
+- **Proporção de Cancelamentos:** As categorias **Married** e **Single** apresentam maior número absoluto de cancelamentos, mas a proporção entre *Churn* e *Não Churn* é **similar em todas as categorias**.
+- **Categorias Menores (Divorced e Unknown):** Seguem o mesmo padrão proporcional, indicando que a falta de informação ou o estado civil específico **não aumentam significativamente o risco de cancelamento**.
+- **Baixo Poder Preditivo:** O estado civil individual **não é um preditor relevante** de *Churn*.
+
+### Conclusão
+
+A variável **marital_status** deve ser codificada para modelos, mas **não é uma feature crítica** para distinguir clientes que cancelam daqueles que permanecem ativos.
+
+---
+
+# Análise da Categoria de Renda por Churn
+![churn](images/churn_renda.png)
+
+O gráfico de barras agrupadas compara clientes que **Cancelaram** e **Não Cancelaram**, segmentados por **faixa de renda**, para avaliar o risco de *Churn*.
+
+### Principais Insights
+
+- **Risco Proporcional Uniforme:** As taxas de *Churn* são relativamente consistentes em todas as faixas de renda, incluindo **Renda Alta** e **Renda Desconhecida (Unknown)**.
+- **Volume Absoluto vs. Risco Relativo:** Embora a faixa **"Less than $40K"** apresente o maior número absoluto de cancelamentos, sua **taxa relativa de Churn** não é maior que as demais.
+- **Baixo Poder Preditivo:** A variável **income_category** sozinha **não é um bom preditor** de cancelamento.
+
+### Conclusão
+
+A renda deve ser codificada para o modelo, mas não é esperada como uma feature crítica na distinção entre clientes que cancelam e os que permanecem ativos.
+
+---
+
+# Análise Integrada de Pairplot e Boxplots para Churn
+![churn](images/variaveis_churn.png)
+
+O estudo combina **Pairplot** (relações bivariadas com Churn) e **Boxplots** (distribuição univariada) para entender padrões de risco e orientar a modelagem preditiva.
+
+---
+
+### 1. Insights do Pairplot (Variáveis mais Correlacionadas ao Churn)
+
+- **Variáveis-chave:** `delta_uso`, `total_trans_ct`, `total_ct_chnng_q4_q1`, `total_revolving_bal`.
+- **Padrão de Churn:** Clientes com **baixo engajamento e baixo saldo rotativo** têm maior probabilidade de cancelar.
+- **Distribuições Univariadas:** Classe *Churn* concentrada em valores baixos; classe *Não Churn* distribuída em valores maiores.
+- **Mudança no Uso (`total_ct_chnng_q4_q1`):** Baixo crescimento de uso é um fator de risco, mas menos discriminatório que volume absoluto ou saldo.
+
+---
+
+### 2. Insights dos Boxplots (Distribuição Univariada)
+
+- **Assimetria Positiva:** Maioria das variáveis com skewed right; transformaçãos logarítmicas ou de raiz quadrada recomendadas.
+- **Outliers:** Presentes em quase todas as variáveis; tratamento robusto necessário (winsorizing ou modelos não paramétricos).
+- **Variáveis discretas/binárias:** Algumas caixas muito estreitas indicam baixa variação ou natureza binária.
+
+---
+
+### 3. Conclusão Integrada e Estratégia de Modelagem
+
+1. **Fatores Preditivos Principais:** Baixo saldo rotativo e baixo número de transações são os melhores indicadores de Churn.
+2. **Pré-Processamento Necessário:**
+   - Transformação de assimetria (`log(x)`).
+   - Tratamento de outliers (*winsorizing*).
+   - Balanceamento de classes (*SMOTE* ou ajuste de peso).
+3. **Seleção de Modelo:** Modelos baseados em árvore (*Random Forest*, *Gradient Boosting*) são recomendados devido a separação não-linear e robustez contra outliers.
+
+---
+
+# Análise de Boxplots e PCA para Churn
+![pca](images/PCA.png)
+
+Esta análise combina **Boxplots** (distribuição univariada) e **PCA** (redução de dimensionalidade) para entender padrões de risco e separabilidade das classes de Churn.
+
+---
+
+### 1. Insights dos Boxplots
+
+- **Assimetria Positiva:** A maioria das variáveis contínuas é *skewed right*, com a mediana próxima ao Q1 e cauda superior longa.
+  - Implica necessidade de **transformações** (log, Box-Cox) para normalização.
+- **Baixa Dispersão:** Algumas variáveis têm caixas estreitas, indicando valores concentrados.
+- **Outliers Generalizados:** Presentes em quase todas as variáveis; exigem **tratamento robusto** (winsorizing ou clipping) para não distorcer modelos.
+
+---
+
+### 2. Insights do PCA
+
+- **Desbalanceamento de Classes:** Clientes *Não Churn* predominam; *Churn* é minoritário.
+- **Baixa Separação:** Clientes que cancelaram estão amplamente misturados aos que não cancelaram.
+  - PCA (PC1 e PC2) não é suficiente para separar as classes.
+  - O Churn é **complexo e não linearmente separável**.
+- **Tendência de Churn:** Leve concentração de clientes que cancelaram em **baixo PC2** e PC1 negativo, indicando variáveis mais relevantes.
+
+---
+
+### 3. Conclusão Integrada
+
+1. **Pré-Processamento Necessário:**
+   - Transformação de assimetria (log/Box-Cox)
+   - Tratamento de outliers
+2. **Desafio de Modelagem:** Alta sobreposição de classes indica que modelos simples ou clusterização não supervisionada não serão eficazes.
+3. **Estratégia Recomendada:**
+   - **Algoritmos robustos**: Gradient Boosting, Deep Learning
+   - **Engenharia de features**: Criar interações ou métricas derivadas para aumentar a separabilidade entre *Churn* e *Não Churn*.
+
+---
+
+# Análise Integrada de Churn: Variável Alvo, Boxplots e Mapa de Calor
+![cda](images/card_marital_status.png)
+
+Esta análise combina a distribuição da variável alvo, as características das variáveis contínuas e a análise multivariada de risco para identificar padrões e segmentos críticos de *Churn*.
+
+---
+
+### 1. Variável Alvo (Churn Flag)
+
+- **Desbalanceamento extremo:**  
+  - Não Cancelou: 6.799 clientes (83.93%)  
+  - Cancelou: 1.302 clientes (16.07%)  
+- **Implicação:** Métricas como **acurácia** são enganosas; usar **Recall, Precision, F1-Score e ROC AUC** para avaliar a classe minoritária.  
+- **Pré-processamento obrigatório:** Técnicas de balanceamento (SMOTE ou ajuste de peso).
+
+---
+
+### 2. Variáveis Contínuas (Boxplots)
+
+- **Assimetria Positiva:** Mediana próxima a Q1, cauda superior longa.  
+  - Transformações sugeridas: $\log(x)$ ou $\sqrt{x)$.  
+- **Outliers generalizados:** Presentes na maioria das variáveis; requerem tratamento (*Winsorizing*, clipping) ou modelos robustos (Árvores de Decisão).  
+- **Baixa Variação:** Algumas variáveis têm IQR muito estreito, indicando pouca diversidade entre clientes.
+
+---
+
+### 3. Análise Multivariada de Risco (Mapa de Calor)
+
+- **Segmentos de alto risco:**
+
+| Segmento | Taxa de Churn | Observação |
+| :--- | :--- | :--- |
+| Unknown (Gold) | 33.33% | Risco máximo; falta de dados indica possível desengajamento. |
+| Married (Platinum) | 28.57% | Risco extremo; custo de perda alto. |
+| Single (Platinum) | 25.00% | Risco elevado; foco em retenção prioritária. |
+
+- **Insights estratégicos:**
+  1. **Produtos premium** (Gold e Platinum) apresentam Churn significativamente maior que a média.
+  2. **Falta de dados (Unknown)** é um preditor relevante; tratar como categoria separada.
+  3. **Base Blue:** Apesar de taxa próxima à média, o volume absoluto de Churn é alto; estratégias de retenção devem focar em escala.
+
+---
+
+**Conclusão:** O risco de Churn é conduzido principalmente por **qualidade dos dados** e **categoria do produto**. O pré-processamento deve lidar com **assimetria**, **outliers** e **desbalanceamento de classes** para otimizar a modelagem preditiva.
+
+---
+
+# Análise Integrada de Churn: Idade, Produto e Perfil do Cliente
+![dba](images/churn_for_age.png)
+
+Esta análise combina insights de risco de *Churn* com perfil demográfico e produto para orientar estratégias de retenção e modelagem preditiva.
+
+---
+
+### 1. Variável Alvo (Churn Flag)
+
+- **Desbalanceamento extremo:**  
+  - Não Cancelou: 6.799 clientes (83.93%)  
+  - Cancelou: 1.302 clientes (16.07%)  
+- **Implicação:** Usar **Recall, ROC AUC** e técnicas de balanceamento (SMOTE ou ajuste de peso); Acurácia é enganosa.
+
+---
+
+### 2. Risco de Churn por Faixa Etária
+
+- **Maior risco:** 41-50 anos e 51-60 anos (~17%).  
+- **Menor risco:** 18-30 anos (~9.7%).  
+- **Idosos (60+):** Risco moderado (~12.9%).  
+- **Conclusão:** Priorizar retenção de clientes de meia-idade.
+
+---
+
+### 3. Categoria do Produto (card_category)
+
+- **Domínio do Blue:** Maior volume absoluto de cancelamentos.  
+- **Risco proporcional mais alto:** Silver e Gold; clientes premium são mais propensos a cancelar.  
+- **Ação:** Estratégias de retenção focadas em clientes de alto valor.
+
+---
+
+### 4. Perfil Demográfico e Educacional
+
+- **Renda:** Dominância da faixa < \$40K (35%) e "Unknown" (10.9%) — tratar como categoria separada.  
+- **Educação:** Graduate (30.6%) e High School (20.4%), "Unknown" (14.9%) deve ser codificado separadamente.  
+- **Estado Civil:** Casados (46.4%) e Solteiros (38.8%), "Unknown" relevante (7.5%).
+
+---
+
+### 5. Variáveis Contínuas (Boxplots)
+
+- **Assimetria positiva:** Mediana próxima ao Q1 em quase todas as variáveis.  
+- **Outliers:** Numerosos na extremidade superior.  
+- **Pré-processamento:** Transformações ($\log(x)$) e tratamento de outliers (*Winsorizing*) necessários.
+
+---
+
+### Sumário e Estratégia de Modelagem
+
+1. **Foco de Retenção:** Clientes de meia-idade (41-60) e portadores de cartões premium (Silver e Gold).  
+2. **Categorias "Unknown":** Manter como *features* separadas; podem ser preditoras de *Churn*.  
+3. **Modelagem:** Devido a desbalanceamento e assimetria, usar modelos robustos como **Gradient Boosting (XGBoost/LightGBM)** em vez de modelos lineares.
+
+---
+
+# Análise da Taxa de Churn por Categoria de Cartão
+![ass](images/churn_for_card_category.png)
+
+O gráfico apresenta a **taxa de *Churn* (%)** por categoria de cartão: Platinum, Gold, Blue e Silver, destacando o **risco relativo** de cancelamento.
+
+---
+
+### 1. Risco de Churn por Categoria
+
+| Categoria | Taxa de Churn | Risco Relativo |
+| :--- | :--- | :--- |
+| **Platinum** | ~22.0% | Máximo |
+| **Gold** | ~19.0% | Alto |
+| **Blue** | ~16.0% | Médio |
+| **Silver** | ~14.5% | Mínimo |
+
+---
+
+### 2. Conclusões Estratégicas
+
+- **Produtos Premium (Platinum e Gold):**  
+  - Maior taxa de *Churn*, acima da média geral (16.07%).  
+  - Clientes mais valiosos, porém mais propensos a cancelar proporcionalmente.  
+  - Sugere necessidade de melhorias na proposta de valor, benefícios ou serviço.
+
+- **Categoria Silver:**  
+  - Menor taxa de *Churn* (~14.5%), indicando maior estabilidade.  
+  - Serve como referência para estratégias de retenção.
+
+- **Categoria Blue:**  
+  - Taxa próxima à média (~16%).  
+  - Retenção deve focar em **volume e automação**; ações para premium devem ser **personalizadas**.
+
+---
+
+### 3. Implicação para Modelagem Preditiva
+
+- **Categoria do Cartão** é um **forte preditor de *Churn***.  
+- Modelos devem prestar atenção especial aos segmentos **Platinum** e **Gold**, pois o impacto do *Churn* nesses grupos é crítico para o negócio.
