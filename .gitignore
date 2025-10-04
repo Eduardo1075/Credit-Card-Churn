@@ -1,0 +1,77 @@
+# =============================
+# 🌐 Projeto de Ciência de Dados - Google Colab
+# =============================
+
+# Diretórios comuns
+data/
+images/
+models/
+__pycache__/
+logs/
+outputs/
+tmp/
+.DS_Store
+
+# Notebooks de cache e checkpoints
+.ipynb_checkpoints/
+*.checkpoint.ipynb
+
+# Arquivos temporários e locais do Colab / Jupyter
+*.log
+*.out
+*.tmp
+*.bak
+*.swp
+*.swo
+*.pid
+*.csv~
+*.json~
+*.xlsx~
+
+# Arquivos exportados (não versionar)
+*.zip
+*.tar
+*.tar.gz
+*.pkl
+*.joblib
+*.npy
+*.npz
+*.sav
+*.h5
+
+# Configurações de ambiente
+.env
+.venv/
+env/
+venv/
+ENV/
+*.pyc
+
+# Arquivos de sistema / IDE
+.idea/
+.vscode/
+*.code-workspace
+
+# Cache do Python
+__pycache__/
+*.py[cod]
+
+# Cache de pacotes
+*.egg-info/
+.eggs/
+*.egg
+*.manifest
+*.spec
+
+# Google Colab / Jupyter outputs
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# Arquivos do sistema operacional
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# =============================
+# Fim do .gitignore
+# =============================
