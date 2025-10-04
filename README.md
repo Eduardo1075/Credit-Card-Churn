@@ -357,7 +357,7 @@ Em resumo, o conjunto de dados reflete uma base **majoritariamente de classe mé
 ---
 
 # Análise — Distribuição da Categoria do Cartão (`card_category`)
-![distribuicao](card_category.png)
+![distribuicao](images/card_category.png)
 
 O gráfico apresenta a distribuição dos clientes entre quatro categorias de cartão: **Blue**, **Silver**, **Gold** e **Platinum**.
 
@@ -392,3 +392,54 @@ A categoria **Blue** domina amplamente a base de clientes, enquanto as categoria
 ---
 
 Em síntese, a variável **card_category** apresenta valor informativo limitado devido ao domínio da categoria **Blue**, exigindo tratamento cuidadoso e agrupamento estratégico para uso efetivo em análises e modelagem preditiva.
+
+---
+
+# Análise — Relação entre Categoria do Cartão (`card_category`) e Churn
+![distribuicao](images/churn_card_category.png)
+
+O gráfico de barras agrupadas mostra a distribuição das categorias de cartão (**Blue**, **Silver**, **Gold** e **Platinum**) segmentadas pela variável alvo **Churn Flag** (*Cancelou* vs *Não Cancelou*), permitindo avaliar o poder preditivo da *feature*.
+
+---
+
+###  1. Domínio da Categoria “Blue”
+
+A categoria **Blue** domina amplamente o dataset e concentra a maior parte dos cancelamentos em termos absolutos.  
+Entretanto, proporcionalmente, o **risco de churn** entre clientes *Blue* é **baixo**, já que a maioria permanece ativa.
+
+---
+
+###  2. Categorias Premium (Silver, Gold e Platinum)
+
+* **Silver e Gold:** Apesar de representarem menor volume, exibem **maior proporção de churn** dentro de suas categorias, sugerindo **risco relativo mais alto** de cancelamento.  
+* **Platinum:** Amostra muito pequena para conclusões confiáveis — pode refletir **baixo risco real** ou **limitação de dados**.
+
+---
+
+###  3. Conclusão e Implicações
+
+* **Poder Preditivo:** A variável `card_category` tem **relevância preditiva** — especialmente para distinguir clientes de maior valor (Silver e Gold) com risco elevado de churn.  
+* **Ação Estratégica:** As categorias *Silver* e *Gold* devem ser **prioridade em estratégias de retenção**, pois combinam **alto valor** e **maior propensão ao cancelamento**.  
+* **Próximo Passo:** Calcular a **taxa percentual de churn** por categoria para confirmar o risco relativo.
+
+---
+
+Em resumo, embora o *Blue* concentre o maior número absoluto de cancelamentos, o **risco proporcional** é maior em *Silver* e *Gold*, tornando estas categorias cruciais para a tomada de decisão analítica e estratégica.
+
+---
+
+# Análise do Nível de Educação por Churn
+![distribuicao](images/churn_education.png)
+
+O gráfico de barras agrupadas compara o número de clientes que **Cancelaram** e **Não Cancelaram** o serviço, segmentados pelo **Nível de Educação**. Essa análise busca entender se o nível educacional influencia a probabilidade de *Churn*.
+
+### Principais Insights
+
+- **Proporção de Cancelamentos:** A relação entre clientes que cancelaram e não cancelaram é **semelhante em todas as categorias educacionais**, indicando que o nível de educação **não é um fator preditivo relevante** para o *Churn*.
+- **Volume de Clientes:** As categorias **Graduate** e **High School** concentram o maior número absoluto de cancelamentos, mas isso se deve ao maior número de clientes nessas faixas — não a um risco maior.
+- **Categorias Menores:** Grupos como **Post-Graduate** e **Doctorate** apresentam volumes reduzidos, dificultando conclusões estatísticas.
+- **Categoria “Unknown”:** O comportamento segue o mesmo padrão das demais, sugerindo que a ausência dessa informação **não aumenta o risco de cancelamento**.
+
+### Conclusão
+
+O **nível de educação** mostra **baixo poder preditivo** para explicar o *Churn*. Estratégias de retenção devem se concentrar em outras variáveis com maior influência sobre o cancelamento.
