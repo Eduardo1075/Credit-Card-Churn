@@ -696,3 +696,205 @@ O gráfico apresenta a **taxa de *Churn* (%)** por categoria de cartão: Platinu
 
 - **Categoria do Cartão** é um **forte preditor de *Churn***.  
 - Modelos devem prestar atenção especial aos segmentos **Platinum** e **Gold**, pois o impacto do *Churn* nesses grupos é crítico para o negócio.
+
+---
+
+# Principais Variáveis e Implicações
+![shap](images/top20_features.png)
+
+As **cinco variáveis mais importantes** são:
+
+1. **total_trans_ct** (Contagem Total de Transações): Fator mais crucial, indicando que a **frequência de transações** é determinante para a previsão (ex.: *Churn* ou risco de crédito).  
+2. **total_trans_amt** (Valor Total de Transações): Complementa a frequência, mostrando que o **volume de gasto** é altamente preditivo.  
+3. **total_revolving_bal** (Saldo Rotativo Total): Reflete o **nível de endividamento**, sendo chave para avaliar risco financeiro.  
+4. **total_relationship_count** (Contagem Total de Relacionamentos): Indica o **engajamento e profundidade do relacionamento** do cliente com o banco.  
+5. **total_amt_chng_q4_q1** (Mudança no Valor Total Q4 vs Q1): Métrica de **comportamento temporal**, mostrando variações importantes no gasto do cliente.
+
+---
+
+## Observações Adicionais
+
+* **Comportamento vs. Demografia:** Variáveis de **uso e comportamento** (transações, saldos, mudanças ao longo do tempo) dominam a importância. Variáveis **demográficas ou estáticas** (idade, gênero, renda, estado civil) têm *gain* baixo.  
+* **Baixa Relevância:** Algumas features (`income_category__60K__80K`, `utilizacao_relativa`, `marital_status_Married`, `gender_0`, `avg_utilization_ratio`) contribuem pouco ou nada para a previsão.  
+
+**Conclusão:** O modelo LightGBM mostra que **atividade transacional e utilização de crédito rotativo** são os principais impulsionadores da capacidade preditiva, enquanto características demográficas têm impacto secundário.
+
+---
+
+# Interpretação do Gráfico SHAP Sumary plot
+![shap](images/SHAP_value.png)
+
+* **Eixo Y:** Variáveis ordenadas por importância.  
+* **Eixo X:** Valor SHAP (impacto na previsão).  
+  * Positivo → aumenta a previsão do modelo.  
+  * Negativo → diminui a previsão do modelo.  
+* **Cor:** Representa o valor da variável.  
+  * Vermelho → valor alto.  
+  * Azul → valor baixo.
+
+---
+
+## Principais Insights
+
+### 1. Variáveis de Comportamento
+
+* **total_trans_ct (Contagem Total de Transações):**  
+  * Baixa contagem (azul, direita) → aumenta probabilidade de *churn*.  
+  * Alta contagem (vermelho, esquerda) → diminui probabilidade de *churn*.  
+
+* **total_trans_amt (Valor Total de Transações):**  
+  * Baixo gasto → aumenta previsão de *churn*.  
+  * Alto gasto → diminui previsão.  
+
+* **total_revolving_bal (Saldo Rotativo Total):**  
+  * Alto saldo (vermelho, direita) → aumenta previsão (maior risco).  
+  * Baixo saldo (azul, esquerda) → diminui previsão.
+
+### 2. Variáveis Dinâmicas
+
+* **total_amt_chng_q4_q1 (Mudança no Valor Total Q4 vs Q1):**  
+  * Queda no gasto (azul, direita) → aumenta probabilidade de *churn*.  
+  * Aumento no gasto (vermelho, esquerda) → diminui probabilidade.
+
+### 3. Variáveis de Efeito Misto
+
+* **months_inactive_12_mon (Meses Inativos 12M):**  
+  * Valores altos (vermelho) → tendência a aumentar previsão de *churn*.  
+  * Valores baixos → menor impacto, efeito misto.
+
+---
+
+**Conclusão:** O gráfico SHAP confirma que **atividade e engajamento do cliente** (transações e saldo) são os principais fatores de risco, enquanto quedas no gasto e períodos de inatividade são sinais fortes de *churn*.
+
+---
+
+# Análise de Resultados do Modelo e Avaliação Financeira — Previsão de Churn
+
+Este relatório resume **insights de modelo (LightGBM) e impactos financeiros** para retenção de clientes.
+
+---
+
+## 1. Principais Variáveis (LightGBM – Gain)
+
+As variáveis mais importantes são **comportamentais**, não demográficas:
+
+- **Top 5:** `total_trans_ct`, `total_trans_amt`, `total_revolving_bal`, `total_relationship_count`, `total_amt_chng_q4_q1`.  
+- **Médias:** idade, meses inativos, limite de crédito.  
+- **Menores:** gênero, estado civil, dependentes, renda.
+
+**Insight:** O churn é explicado principalmente pelo **comportamento transacional e engajamento**, pouco pelas características demográficas.
+
+---
+
+## 2. SHAP Values — Impacto nas Previsões
+
+- **Transações baixas (`total_trans_ct`) →** aumento do risco de churn.  
+- **Baixo gasto (`total_trans_amt`) →** maior probabilidade de churn.  
+- **Saldo rotativo (`total_revolving_bal`) →** níveis intermediários aumentam churn.  
+- **Queda no uso (`delta_uso`, mudanças trimestrais) →** indicativo forte de churn.  
+- **Mais produtos (`total_relationship_count`) →** reduz churn.  
+- **Meses inativos →** quanto mais, maior o risco.
+
+> Conclusão: **Engajamento e uso do produto** dominam a previsão; demografia tem peso baixo.
+
+---
+
+## 3. Insights e Recomendações de Negócio
+
+1. **Frequência de transações:** Incentivar uso via cashback, pontos, alertas automáticos.  
+2. **Valor transacionado:** Ofertas personalizadas, aumento de limite, promoções baseadas no histórico.  
+3. **Queda de uso:** Alertas e ações proativas de retenção.  
+4. **Relacionamento múltiplo:** Estratégias de *cross-sell* e pacotes fidelização.  
+5. **Inatividade prolongada:** Programas de reativação, notificações personalizadas.  
+6. **Baixo impacto demográfico:** Foco em comportamento, não segmentações tradicionais.
+
+> Estratégia central: **monitoramento em tempo real + ações proativas de retenção personalizadas**.
+
+---
+
+## 4. Avaliação Financeira — Cenário Base
+
+- **Clientes analisados:** 10.127  
+- **Taxa de churn histórica:** 16,07% → 1.627 clientes  
+- **ARPA:** R\$ 3.000/ano  
+- **Custo ação de retenção:** R\$ 100  
+- **Modelo:** recall 90%, precision 87%  
+- **Eficácia ação:** 50%
+
+**Resultados 1 ano:**
+
+| Métrica | Valor |
+|---------|------:|
+| Clientes salvos | 732 |
+| Receita preservada | R\$ 2.197.002 |
+| Custo total | R\$ 168.353 |
+| Lucro líquido | R\$ 2.028.649 |
+| ROI | 12,05× |
+
+**Custo por cliente salvo:** R\$ 229,89  
+**EV médio por cliente alvo:** R\$ 1.205  
+
+---
+
+## 5. Sensibilidade
+
+- **Variação custo por ação (R\$ 50–200) e ret_eff (30–70%)** mantém projeto viável.  
+- **Aumento de recall** aumenta clientes salvos, mas reduz precision → deve-se otimizar lucro líquido.  
+- **Break-even:** Retenção mínima para não prejuízo é baixa (≈ 2–8%).
+
+---
+
+## 6. Modelo vs Aleatório
+
+| Estratégia | Net (lucro) |
+|------------|------------:|
+| Modelo LGBM | R\$ 2.028.649 |
+| Aleatório | R\$ 237.461 |
+
+> **Lift financeiro:** ≈ 8,5×.
+
+---
+
+## 7. Escalabilidade (200.000 clientes)
+
+- Clientes salvos: ≈ 14.463  
+- Receita preservada: R\$ 43,39M  
+- Custo campanhas: R\$ 3,32M  
+- Lucro líquido: R\$ 40,06M  
+- NPV 3 anos (desconto 10%): ≈ R\$ 101M
+
+---
+
+## 8. Principais KPIs para Dashboard
+
+- EV médio por cliente alvo: R\$ 1.205  
+- Custo médio por cliente salvo: R\$ 229,89  
+- Percentual de desperdício (FP): ≈ 13%  
+- Perda anual por FN: R\$ 488.223  
+
+---
+
+## 9. Riscos e Monitoramento
+
+- Eficácia da ação (ret_eff) é sensível → usar A/B tests  
+- Monitorar ARPA e churn pós-campanha  
+- Ajustar trade-off recall × precision baseado em lucro líquido
+
+---
+
+## 10. Fórmulas Básicas (Apêndice)
+
+```text
+P = N × p
+TP = recall × P
+FP = TP × (1/precision − 1)
+T = TP + FP
+Salvos = TP × ret_eff
+Revenue_saved = Salvos × ARPA
+Cost_total = T × cost_ret
+Net = Revenue_saved − Cost_total
+ROI = Net / Cost_total
+EV_por_alvo = precision × ret_eff × ARPA − cost_ret
+Ret_eff_break_even = (1 / precision) × (cost_ret / ARPA)
+NPV_multi_ano = Salvos × PV(ARPA, discount, years) − Cost_total
+
