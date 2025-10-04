@@ -353,3 +353,42 @@ As faixas de **renda alta** e **dados ausentes** têm menor presença:
 ---
 
 Em resumo, o conjunto de dados reflete uma base **majoritariamente de classe média-baixa**, o que requer atenção ao balanceamento e à representação das faixas superiores e dos dados desconhecidos na modelagem.
+
+---
+
+# Análise — Distribuição da Categoria do Cartão (`card_category`)
+![distribuicao](card_category.png)
+
+O gráfico apresenta a distribuição dos clientes entre quatro categorias de cartão: **Blue**, **Silver**, **Gold** e **Platinum**.
+
+---
+
+###  Concentração e Desequilíbrio
+
+Há um **desequilíbrio extremo** na variável:
+
+| Categoria | Percentual |
+| :--- | :--- |
+| **Blue** | **93.3%** |
+| **Silver** | **5.3%** |
+| **Gold** | **1.2%** |
+| **Platinum** | **0.2%** |
+
+A categoria **Blue** domina amplamente a base de clientes, enquanto as categorias de maior valor (**Silver, Gold e Platinum**) somam apenas **6.7%**.
+
+---
+
+###  Implicações Analíticas e de Negócio
+
+1. **Modelagem Preditiva:**  
+   O forte desequilíbrio torna a variável pouco informativa para modelos de *Machine Learning*. As classes minoritárias terão pouca representatividade, aumentando o risco de *overfitting*.
+
+2. **Pré-processamento:**  
+   Recomenda-se **agrupar** as categorias *Silver*, *Gold* e *Platinum* em uma única categoria (“**Premium**” ou “**Outras**”) para aumentar a robustez estatística.
+
+3. **Estratégia de Produto:**  
+   A predominância do cartão **Blue** indica uma base centrada em produtos de entrada, revelando potencial para **estratégias de *upgrade*** e **fidelização** de clientes para níveis superiores.
+
+---
+
+Em síntese, a variável **card_category** apresenta valor informativo limitado devido ao domínio da categoria **Blue**, exigindo tratamento cuidadoso e agrupamento estratégico para uso efetivo em análises e modelagem preditiva.
